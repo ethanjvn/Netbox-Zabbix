@@ -47,7 +47,7 @@ class PhysicalDevice():
         self.hostgroup = None
         self.tenant = nb.tenant
         self.config_context = nb.config_context
-        self.custom_fields = nb.custom_fields
+        self.custom_fields = nb.custom_fields['Templates']
         self.zbxproxy = None
         self.zabbix_state = 0
         self.journal = journal
