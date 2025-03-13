@@ -53,7 +53,6 @@ logger.setLevel(logging.WARNING)
 
 def main(arguments):
     """Run the sync process."""
-    logger.info("---------------------------------------------------------------------------------------------------")
     # pylint: disable=too-many-branches, too-many-statements
     # set environment variables
     if arguments.verbose:
@@ -156,7 +155,7 @@ def main(arguments):
 
     # Get NetBox API version
     nb_version = netbox.version
-
+    logger.info("---------------------------------------------------")
     # Go through all NetBox devices
     for nb_vm in netbox_vms:
         try:
