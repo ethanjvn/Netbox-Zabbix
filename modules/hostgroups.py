@@ -61,10 +61,12 @@ class Hostgroup():
             format_options["platform"] = self.nb.platform.name if self.nb.platform else None
         # Variables only applicable for devices
         if self.type == "dev":
+            format_options["type"] = "network"
             format_options["manufacturer"] = self.nb.device_type.manufacturer.name
             format_options["location"] = str(self.nb.location) if self.nb.location else None
         # Variables only applicable for VM's
         if self.type == "vm":
+            format_options["type"] = "system"
             # Check if a cluster is configured. Could also be configured in a site.
             if self.nb.cluster:
                 format_options["cluster"] = self.nb.cluster.name

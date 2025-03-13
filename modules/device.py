@@ -427,7 +427,8 @@ class PhysicalDevice():
                             "templates": templateids,
                             "description": description,
                             "inventory_mode": self.inventory_mode,
-                            "inventory": self.inventory
+                            "inventory": self.inventory,
+                            "tags": [{"tag": "sync", "value": "true"}]
                             }
             # If a Zabbix proxy or Zabbix Proxy group has been defined
             if self.zbxproxy:

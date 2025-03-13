@@ -85,7 +85,7 @@ def main(arguments):
     # Check if the provided Hostgroup layout is valid
     hg_objects = hostgroup_format.split("/")
     allowed_objects = ["location", "role", "manufacturer", "region",
-                       "site", "site_group", "tenant", "tenant_group"]
+                       "site", "site_group", "tenant", "tenant_group", "type"]
     # Create API call to get all custom fields which are on the device objects
     try:
         device_cfs = list(netbox.extras.custom_fields.filter(
@@ -118,7 +118,7 @@ def main(arguments):
                                password=zabbix_pass, ssl_context=ssl_ctx)
         else:
             zabbix = ZabbixAPI(
-                zabbix_host, token=zabbix_token, ssl_context=ssl_ctx)
+                zabbix_host, token=zabbix_token, ssl_context=ssl_ctx, skip_version_check = True)
         zabbix.check_auth()
     except (APIRequestError, ProcessingError) as e:
         e = f"Zabbix returned the following error: {str(e)}"
