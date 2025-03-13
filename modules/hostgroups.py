@@ -63,9 +63,9 @@ class Hostgroup():
 
             if platform_name:
                 if "Windows" in platform_name:
-                    format_options["platform"] = "Windows"
+                    format_options["platform"] = "windows"
                 elif "Linux" in platform_name:
-                    format_options["platform"] = "Linux"
+                    format_options["platform"] = "linux"
                 else:
                     format_options["platform"] = "Unknown"
             else:

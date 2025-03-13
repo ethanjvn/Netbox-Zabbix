@@ -47,6 +47,7 @@ class PhysicalDevice():
         self.hostgroup = None
         self.tenant = nb.tenant
         self.config_context = nb.config_context
+        self.custom_fields = nb.custom_fields
         self.zbxproxy = None
         self.zabbix_state = 0
         self.journal = journal
@@ -148,6 +149,7 @@ class PhysicalDevice():
 
     def get_templates_context(self):
         """ Get Zabbix templates from the device context """
+        self.logger.debug(self.config_context)
         if "zabbix" not in self.config_context:
             e = (f"Host {self.name}: Key 'zabbix' not found in config "
                  "context for template lookup")
