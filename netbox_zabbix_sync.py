@@ -49,11 +49,11 @@ logger = logging.getLogger("NetBox-Zabbix-sync")
 logger.addHandler(lgout)
 logger.addHandler(lgfile)
 logger.setLevel(logging.WARNING)
-logger.info("---------------------------------------------------------------------------------------------------")
 
 
 def main(arguments):
     """Run the sync process."""
+    logger.info("---------------------------------------------------------------------------------------------------")
     # pylint: disable=too-many-branches, too-many-statements
     # set environment variables
     if arguments.verbose:
