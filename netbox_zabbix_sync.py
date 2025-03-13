@@ -49,6 +49,7 @@ logger = logging.getLogger("NetBox-Zabbix-sync")
 logger.addHandler(lgout)
 logger.addHandler(lgfile)
 logger.setLevel(logging.WARNING)
+logger("---------------------------------------------------------------------------------------------------")
 
 
 def main(arguments):
