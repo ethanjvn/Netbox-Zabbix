@@ -723,7 +723,7 @@ class PhysicalDevice():
                 # If no updates are found, Zabbix interface is in-sync
                 e = f"Host {self.name}: interface in-sync."
                 #self.logger.debug(e)
-                self.logger.info("{self.name} crée")
+                self.logger.info(f"{self.name} crée")
 
         else:
             e = (f"Host {self.name} has unsupported interface configuration."
