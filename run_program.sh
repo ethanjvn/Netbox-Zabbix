@@ -1,2 +1,2 @@
 #!/bin/bash
-/Netbox-Zabbix\netbox_zabbix_sync.py
+python /opt/netbox-zabbix/netbox_zabbix_sync.py -v

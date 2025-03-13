@@ -1,1 +1,1 @@
-0 * * * * /Netbox-Zabbix\netbox_zabbix_sync.py
+0 * * * * /opt/netbox-zabbix/run_program.sh
