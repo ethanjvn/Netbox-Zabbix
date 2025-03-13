@@ -27,6 +27,7 @@ create_journal = False
 # hostgroup atributes of VM's such as cluster_type and cluster
 sync_vms = False
 # Check the README documentation for values to use in the VM hostgroup format.
+vm_hostgroup_format = "region/site/type/platform"
 
 ## Proxy Sync
 # Set to true to enable removal of proxy's under hosts. Use with caution and make sure that you specified
