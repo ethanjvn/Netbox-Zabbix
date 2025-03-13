@@ -47,7 +47,7 @@ class PhysicalDevice():
         self.hostgroup = None
         self.tenant = nb.tenant
         self.config_context = nb.config_context
-        self.custom_fields = nb.custom_fields['Templates']
+        self.custom_fields = nb.custom_fields
         self.zbxproxy = None
         self.zabbix_state = 0
         self.journal = journal
@@ -151,18 +151,20 @@ class PhysicalDevice():
         """ Get Zabbix templates from the device context """
         self.logger.debug(self.config_context)
         self.logger.debug(self.custom_fields)
-        if "zabbix" not in self.custom_fields:
+        template = self.custom_fields['Templates']
+        self.logger.debug(template)
+        if "zabbix" not in template:
             e = (f"Host {self.name}: Key 'zabbix' not found in config "
                  "context for template lookup")
             raise TemplateError(e)
-        if "templates" not in self.custom_fields["zabbix"]:
+        if "templates" not in template["zabbix"]:
             e = (f"Host {self.name}: Key 'templates' not found in config "
                  "context 'zabbix' for template lookup")
             raise TemplateError(e)
         # Check if format is list or string.
-        if isinstance(self.custom_fields["zabbix"]["templates"], str):
-            return [self.custom_fields["zabbix"]["templates"]]
-        return self.custom_fields["zabbix"]["templates"]
+        if isinstance(template["zabbix"]["templates"], str):
+            return [template["zabbix"]["templates"]]
+        return template["zabbix"]["templates"]
 
     def set_inventory(self, nbdevice):
         """ Set host inventory """
