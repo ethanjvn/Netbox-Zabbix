@@ -58,7 +58,14 @@ class Hostgroup():
             format_options["site"] = self.nb.site.name if self.nb.site else None
             format_options["tenant"] = str(self.nb.tenant) if self.nb.tenant else None
             format_options["tenant_group"] = str(self.nb.tenant.group) if self.nb.tenant else None
-            format_options["platform"] = self.nb.platform.name if self.nb.platform else None
+
+            platform_name = self.nb.platform.name if self.nb.platform else None
+            if "Windows" in platform_name:
+                format_options["platform"] = "Windows"
+            elif "Linux" in platform_name:
+                format_options["platform"] = "Linux"
+
+            
         # Variables only applicable for devices
         if self.type == "dev":
             format_options["type"] = "network"
