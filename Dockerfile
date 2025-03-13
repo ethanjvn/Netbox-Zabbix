@@ -2,7 +2,7 @@
 FROM python:3.12-alpine
 
 # Installer cron et autres dépendances nécessaires
-RUN apk add --no-cache bash busybox-initscripts openrc
+RUN apk add --no-cache bash openrc
 
 # Copier les fichiers nécessaires dans le conteneur
 COPY . /opt/netbox-zabbix
