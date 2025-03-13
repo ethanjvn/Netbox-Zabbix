@@ -1,0 +1,1 @@
+0 * * * * /Netbox-Zabbix\netbox_zabbix_sync.py
