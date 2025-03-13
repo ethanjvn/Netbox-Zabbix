@@ -25,7 +25,7 @@ create_journal = False
 # Set sync_vms to True in order to use this new feature
 # Use the hostgroup vm_hostgroup_format mapper for specific
 # hostgroup atributes of VM's such as cluster_type and cluster
-sync_vms = False
+sync_vms = True
 # Check the README documentation for values to use in the VM hostgroup format.
 vm_hostgroup_format = "region/site/type/platform"
 
