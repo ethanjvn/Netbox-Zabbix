@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 FROM python:3.12-alpine
-RUN apk add --no-cache bash curl cron
+RUN apk add --no-cache bash curl dcron
 RUN mkdir -p /opt/netbox-zabbix
 COPY . /opt/netbox-zabbix
 WORKDIR /opt/netbox-zabbix
