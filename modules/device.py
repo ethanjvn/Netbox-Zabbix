@@ -411,7 +411,7 @@ class PhysicalDevice():
                             self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_nametest}")
                             self.zbxproxy = proxy
                             self.logger.debug("oui")
-
+                            self.logger.debug(self.zbxproxy)
                             return True
                         elif self.nb.site.region == "CCI13" :
                             proxy_nametest = "zabbix-pxy-cciamp"
