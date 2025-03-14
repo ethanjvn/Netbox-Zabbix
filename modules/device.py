@@ -406,7 +406,7 @@ class PhysicalDevice():
                         self.zbxproxy = proxy
                         return True
                     else:
-                        if str(self.nb.site.region).strip().upper() == "CCI06" :
+                        if self.nb.site.region.strip() == "CCI06" :
                             proxy_nametest = "zabbix-pxy-siege"
                             self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_nametest}")
                             self.zbxproxy = proxy
