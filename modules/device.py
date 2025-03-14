@@ -388,13 +388,6 @@ class PhysicalDevice():
                 proxy_nametest = f"zabbix-pxy-{self.nb.site}"
                 # self.logger.debug(proxy_name)
                 self.logger.debug(proxy_nametest)
-                self.logger.debug(self.nb.site.region)
-                self.logger.debug("CCI06")
-
-                if self.nb.site.region == "CCI06":
-                    self.logger.debug("Condition remplie")
-                else:
-                    self.logger.debug("Condition non remplie")
                 # go through all proxies
                 for proxy in proxy_list:
                     # If the proxy does not match the type, ignore and continue
@@ -409,7 +402,7 @@ class PhysicalDevice():
                         if str(self.nb.site.region) == "CCI06" :
                             proxy_nametest = "zabbix-pxy-siege"
                             self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_nametest}")
-                            self.zbxproxy = proxy
+                            self.zbxproxy = (proxy["name"] == "zabbix-pxy-siege")
                             self.logger.debug("oui")
                             self.logger.debug(self.zbxproxy)
                             return True
