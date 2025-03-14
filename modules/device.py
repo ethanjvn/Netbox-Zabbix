@@ -387,9 +387,6 @@ class PhysicalDevice():
                 proxy_nametest = f"zabbix-pxy-{self.nb.site}"
                 # self.logger.debug(proxy_name)
                 self.logger.debug(proxy_nametest)
-                self.logger.debug( self.nb_regions)
-                self.logger.debug( self.nb_region)
-                self.logger.debug(proxy_nametest)
 
                 # go through all proxies
                 for proxy in proxy_list:
@@ -402,12 +399,12 @@ class PhysicalDevice():
                         self.zbxproxy = proxy
                         return True
                     else:
-                        if self.nb_regions == "CCI06" :
+                        if self.nb.site.region == "CCI06" :
                             proxy_nametest = "zabbix-pxy-siege"
                             self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_nametest}")
                             self.zbxproxy = proxy
                             return True
-                        elif self.nb_regions == "CCI13" :
+                        elif self.nb.site.region == "CCI13" :
                             proxy_nametest = "zabbix-pxy-cciamp"
                             self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_nametest}")
                             self.zbxproxy = proxy
