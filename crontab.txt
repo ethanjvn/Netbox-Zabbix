@@ -1,1 +1,1 @@
-* * * * * /opt/netbox-zabbix/run_program.sh
+0 * * * * /opt/netbox-zabbix/run_program.sh
