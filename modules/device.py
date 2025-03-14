@@ -389,6 +389,8 @@ class PhysicalDevice():
                 # self.logger.debug(proxy_name)
                 self.logger.debug(proxy_nametest)
                 self.logger.debug(self.nb.site.region)
+                self.logger.debug("CCI06")
+
                 if self.nb.site.region == "CCI06":
                     self.logger.debug("Condition remplie")
                 else:
