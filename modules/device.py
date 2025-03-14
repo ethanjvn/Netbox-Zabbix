@@ -383,7 +383,7 @@ class PhysicalDevice():
             # Check if the key exists in NetBox CC
             if proxy_type in self.nb.config_context["zabbix"]:
                 proxy_name = self.nb.config_context["zabbix"][proxy_type]
-                proxy_nametest = (f"zabbix-pxy-"+{self.nb.site})
+                proxy_nametest = f"zabbix-pxy-{self.nb.site}"
 
                 self.logger.debug(proxy_name)
                 self.logger.debug(proxy_nametest)
