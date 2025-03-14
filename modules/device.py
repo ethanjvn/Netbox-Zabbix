@@ -390,9 +390,9 @@ class PhysicalDevice():
                 self.logger.debug(proxy_nametest)
                 self.logger.debug(self.nb.site.region)
                 if self.nb.site.region == "CCI06":
-                    print("Condition remplie")
+                    self.logger.debug("Condition remplie")
                 else:
-                    print("Condition non remplie")
+                    self.logger.debug("Condition non remplie")
                 # go through all proxies
                 for proxy in proxy_list:
                     # If the proxy does not match the type, ignore and continue
