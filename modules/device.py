@@ -55,6 +55,7 @@ class PhysicalDevice():
         self.inventory_mode = -1
         self.inventory = {}
         self.logger = logger if logger else getLogger(__name__)
+        
         self._setBasics()
 
     def __repr__(self):
@@ -386,6 +387,10 @@ class PhysicalDevice():
                 proxy_nametest = f"zabbix-pxy-{self.nb.site}"
                 # self.logger.debug(proxy_name)
                 self.logger.debug(proxy_nametest)
+                self.logger.debug( self.nb_regions)
+                self.logger.debug( self.nb_region)
+                self.logger.debug(proxy_nametest)
+
                 # go through all proxies
                 for proxy in proxy_list:
                     # If the proxy does not match the type, ignore and continue
@@ -397,12 +402,12 @@ class PhysicalDevice():
                         self.zbxproxy = proxy
                         return True
                     else:
-                        if self.nb.regions == "CCI06" :
+                        if self.nb_regions == "CCI06" :
                             proxy_nametest = "zabbix-pxy-siege"
                             self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_nametest}")
                             self.zbxproxy = proxy
                             return True
-                        elif self.nb.regions == "CCI13" :
+                        elif self.nb_regions == "CCI13" :
                             proxy_nametest = "zabbix-pxy-cciamp"
                             self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_nametest}")
                             self.zbxproxy = proxy
