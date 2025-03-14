@@ -48,6 +48,7 @@ class PhysicalDevice():
         self.tenant = nb.tenant
         self.config_context = nb.config_context
         self.custom_fields = nb.custom_fields
+        self.region = nb.site.region
         self.zbxproxy = None
         self.zabbix_state = 0
         self.journal = journal
@@ -389,8 +390,7 @@ class PhysicalDevice():
                 self.logger.debug(proxy_nametest)
                 self.logger.debug(self.nb.site.region)
                 self.logger.debug("1")
-
-
+                self.logger.debug(self.region)
                 # go through all proxies
                 for proxy in proxy_list:
                     # If the proxy does not match the type, ignore and continue
