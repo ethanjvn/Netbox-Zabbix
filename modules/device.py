@@ -367,11 +367,11 @@ class PhysicalDevice():
         input: List of all proxies and proxy groups in standardized format
         """
         # check if the key Zabbix is defined in the config context
-        if not "zabbix" in self.nb.config_context:
-            return False
-        if ("proxy" in self.nb.config_context["zabbix"] and
-               not self.nb.config_context["zabbix"]["proxy"]):
-            return False
+        # if not "zabbix" in self.nb.config_context:
+        #     return False
+        # if ("proxy" in self.nb.config_context["zabbix"] and
+        #        not self.nb.config_context["zabbix"]["proxy"]):
+        #     return False
         # Proxy group takes priority over a proxy due
         # to it being HA and therefore being more reliable
         # Includes proxy group fix since Zabbix <= 6 should ignore this
@@ -381,11 +381,10 @@ class PhysicalDevice():
             proxy_types.insert(0, "proxy_group")
         for proxy_type in proxy_types:
             # Check if the key exists in NetBox CC
-            if proxy_type in self.nb.config_context["zabbix"]:
-                proxy_name = self.nb.config_context["zabbix"][proxy_type]
+            # if proxy_type in self.nb.config_context["zabbix"]:
+            #     proxy_name = self.nb.config_context["zabbix"][proxy_type]
                 proxy_nametest = f"zabbix-pxy-{self.nb.site}"
-
-                self.logger.debug(proxy_name)
+                # self.logger.debug(proxy_name)
                 self.logger.debug(proxy_nametest)
                 # go through all proxies
                 for proxy in proxy_list:
@@ -393,11 +392,22 @@ class PhysicalDevice():
                     if not proxy["type"] == proxy_type:
                         continue
                     # If the proxy name matches
-                    if proxy["name"] == proxy_name:
-                        self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_name}")
+                    if proxy["name"] == proxy_nametest:
+                        self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_nametest}")
                         self.zbxproxy = proxy
                         return True
-                self.logger.warning(f"Host {self.name}: unable to find proxy {proxy_name}")
+                    else:
+                        if self.nb.site == "CCI06" :
+                            proxy_nametest = "zabbix-pxy-siege"
+                            self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_nametest}")
+                            self.zbxproxy = proxy
+                            return True
+                        elif self.nb.site == "CCI13" :
+                            proxy_nametest = "zabbix-pxy-cciamp"
+                            self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_nametest}")
+                            self.zbxproxy = proxy
+                            return True
+                    self.logger.warning(f"Host {self.name}: unable to find proxy {proxy_nametest}")
         return False
 
     def createInZabbix(self, groups, templates, proxies,
