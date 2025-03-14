@@ -34,18 +34,14 @@ except ModuleNotFoundError:
     sys.exit(1)
 
 # Set logging
-log_format = logging.Formatter('%(asctime)s - %(name)s - '
-                               '%(levelname)s - %(message)s')
+log_format = logging.Formatter('%(asctime)s - %(name)s - ''%(levelname)s - %(message)s')
 lgout = logging.StreamHandler()
 lgout.setFormatter(log_format)
 lgout.setLevel(logging.DEBUG)
-
-lgfile = logging.FileHandler(path.join(path.dirname(
-                             path.realpath(__file__)), "sync.log"))
+lgfile = logging.FileHandler(path.join(path.dirname(path.realpath(__file__)), "sync.log"))
 lgfile.setFormatter(log_format)
 lgfile.setLevel(logging.DEBUG)
-
-logger = logging.getLogger("NetBox-Zabbix-sync")
+logger = logging.getLogger("NetBox-Zabbix")
 logger.addHandler(lgout)
 logger.addHandler(lgfile)
 logger.setLevel(logging.WARNING)
@@ -105,11 +101,10 @@ def main(arguments):
                  " use valid items and seperate them with '/'.")
             logger.error(e)
             raise HostgroupError(e)
+    
     # Set Zabbix API
     try:
         ssl_ctx = ssl.create_default_context()
-
-        # If a custom CA bundle is set for pynetbox (requests), also use it for the Zabbix API
         if environ.get("REQUESTS_CA_BUNDLE", None):
             ssl_ctx.load_verify_locations(environ["REQUESTS_CA_BUNDLE"])
 
@@ -152,7 +147,7 @@ def main(arguments):
             proxy['name'] = proxy.pop('host')
     # Prepare list of all proxy and proxy_groups
     zabbix_proxy_list = proxy_prepper(zabbix_proxies, zabbix_proxygroups)
-
+    logger.info("zabbix_proxy_list")
     # Get NetBox API version
     nb_version = netbox.version
     logger.info("---------------------------------------------------")
