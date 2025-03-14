@@ -397,12 +397,12 @@ class PhysicalDevice():
                         self.zbxproxy = proxy
                         return True
                     else:
-                        if self.nb.region == "CCI06" :
+                        if self.nb.regions == "CCI06" :
                             proxy_nametest = "zabbix-pxy-siege"
                             self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_nametest}")
                             self.zbxproxy = proxy
                             return True
-                        elif self.nb.region == "CCI13" :
+                        elif self.nb.regions == "CCI13" :
                             proxy_nametest = "zabbix-pxy-cciamp"
                             self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_nametest}")
                             self.zbxproxy = proxy
