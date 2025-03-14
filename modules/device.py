@@ -184,7 +184,7 @@ class PhysicalDevice():
             return False
         self.inventory = {}
         if inventory_sync and self.inventory_mode in [0,1]:
-            #self.logger.debug(f"Host {self.name}: Starting inventory mapper")
+            self.logger.debug(f"Host {self.name}: Starting inventory mapper")
             # Let's build an inventory dict for each property in the inventory_map
             for nb_inv_field, zbx_inv_field in inventory_map.items():
                 field_list = nb_inv_field.split("/") # convert str to list based on delimiter
@@ -201,13 +201,13 @@ class PhysicalDevice():
                     self.inventory[zbx_inv_field] = str(value)
                 elif not value:
                     # empty value should just be an empty string for API compatibility
-                    #self.logger.debug(f"Host {self.name}: NetBox inventory lookup for "f"'{nb_inv_field}' returned an empty value")
+                    self.logger.debug(f"Host {self.name}: NetBox inventory lookup for "f"'{nb_inv_field}' returned an empty value")
                     self.inventory[zbx_inv_field] = ""
                 else:
                     # Value is not a string or numeral, probably not what the user expected.
                     self.logger.error(f"Host {self.name}: Inventory lookup for '{nb_inv_field}'"
                                       " returned an unexpected type: it will be skipped.")
-            #self.logger.debug(f"Host {self.name}: Inventory mapping complete. "f"Mapped {len(list(filter(None, self.inventory.values())))} field(s)")
+            self.logger.debug(f"Host {self.name}: Inventory mapping complete. "f"Mapped {len(list(filter(None, self.inventory.values())))} field(s)")
         return True
 
     def isCluster(self):
@@ -240,10 +240,10 @@ class PhysicalDevice():
         """
         masterid = self.getClusterMaster()
         if masterid == self.id:
-            #self.logger.debug(f"Host {self.name} is primary cluster member. "f"Modifying hostname from {self.name} to " +f"{self.nb.virtual_chassis.name}.")
+            self.logger.debug(f"Host {self.name} is primary cluster member. "f"Modifying hostname from {self.name} to " +f"{self.nb.virtual_chassis.name}.")
             self.name = self.nb.virtual_chassis.name
             return True
-        #self.logger.debug(f"Host {self.name} is non-primary cluster member.")
+        self.logger.debug(f"Host {self.name} is non-primary cluster member.")
         return False
 
     def zbxTemplatePrepper(self, templates):
@@ -272,7 +272,7 @@ class PhysicalDevice():
                     self.zbx_templates.append({"templateid": zbx_template['templateid'],
                                                "name": zbx_template['name']})
                     e = f"Host {self.name}: found template {zbx_template['name']}"
-                    #self.logger.debug(e)
+                    self.logger.debug(e)
             # Return error should the template not be found in Zabbix
             if not template_match:
                 e = (f"Unable to find template {nb_template} "
@@ -291,7 +291,7 @@ class PhysicalDevice():
             if group['name'] == self.hostgroup:
                 self.group_id = group['groupid']
                 e = f"Host {self.name}: matched group {group['name']}"
-                #self.logger.debug(e)
+                self.logger.debug(e)
                 return True
         return False
 
@@ -390,7 +390,7 @@ class PhysicalDevice():
                         continue
                     # If the proxy name matches
                     if proxy["name"] == proxy_name:
-                        #self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_name}")
+                        self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_name}")
                         self.zbxproxy = proxy
                         return True
                 self.logger.warning(f"Host {self.name}: unable to find proxy {proxy_name}")
@@ -556,20 +556,20 @@ class PhysicalDevice():
             self.logger.error(e)
             raise SyncInventoryError(e)
         host = host[0]
-        # if host["host"] == self.name:
-        #     #self.logger.debug(f"Host {self.name}: hostname in-sync.")
-        # else:
-        #     self.logger.warning(f"Host {self.name}: hostname OUT of sync. "
-        #                         f"Received value: {host['host']}")
-        #     self.updateZabbixHost(host=self.name)
+        if host["host"] == self.name:
+            self.logger.debug(f"Host {self.name}: hostname in-sync.")
+        else:
+            self.logger.warning(f"Host {self.name}: hostname OUT of sync. "
+                                f"Received value: {host['host']}")
+            self.updateZabbixHost(host=self.name)
         # Execute check depending on wether the name is special or not
-        # if self.use_visible_name:
-            # if host["name"] == self.visible_name:
-            #     #self.logger.debug(f"Host {self.name}: visible name in-sync.")
-            # else:
-            #     self.logger.warning(f"Host {self.name}: visible name OUT of sync."
-            #                         f" Received value: {host['name']}")
-            #     self.updateZabbixHost(name=self.visible_name)
+        if self.use_visible_name:
+            if host["name"] == self.visible_name:
+                self.logger.debug(f"Host {self.name}: visible name in-sync.")
+            else:
+                self.logger.warning(f"Host {self.name}: visible name OUT of sync."
+                                    f" Received value: {host['name']}")
+                self.updateZabbixHost(name=self.visible_name)
 
         # Check if the templates are in-sync
         if not self.zbx_template_comparer(host["parentTemplates"]):
@@ -581,8 +581,8 @@ class PhysicalDevice():
             # Update Zabbix with NB templates and clear any old / lost templates
             self.updateZabbixHost(templates_clear=host["parentTemplates"],
                                       templates=templateids)
-        # else:
-        #     self.logger.debug(f"Host {self.name}: template(s) in-sync.")
+        else:
+            self.logger.debug(f"Host {self.name}: template(s) in-sync.")
 
         # Check if Zabbix version is 6 or higher. Issue #93
         group_dictname = "hostgroups"
@@ -590,29 +590,29 @@ class PhysicalDevice():
             group_dictname = "groups"
         for group in host[group_dictname]:
             if not group["groupid"] == self.group_id:
-        #         self.logger.debug(f"Host {self.name}: hostgroup in-sync.")
-        #         break
-        # else:
-        #     self.logger.warning(f"Host {self.name}: hostgroup OUT of sync.")
-                self.updateZabbixHost(groups={'groupid': self.group_id})
+                self.logger.debug(f"Host {self.name}: hostgroup in-sync.")
+                break
+        else:
+            self.logger.warning(f"Host {self.name}: hostgroup OUT of sync.")
+            self.updateZabbixHost(groups={'groupid': self.group_id})
 
         if not int(host["status"]) == self.zabbix_state:
-        #     self.logger.debug(f"Host {self.name}: status in-sync.")
-        # else:
-        #     self.logger.warning(f"Host {self.name}: status OUT of sync.")
+            self.logger.debug(f"Host {self.name}: status in-sync.")
+        else:
+            self.logger.warning(f"Host {self.name}: status OUT of sync.")
             self.updateZabbixHost(status=str(self.zabbix_state))
         # Check if a proxy has been defined
         if self.zbxproxy:
             # Check if proxy or proxy group is defined
-            # if (self.zbxproxy["idtype"] in host and
-            #     host[self.zbxproxy["idtype"]] == self.zbxproxy["id"]):
-                #self.logger.debug(f"Host {self.name}: proxy in-sync.")
+            if (self.zbxproxy["idtype"] in host and
+                host[self.zbxproxy["idtype"]] == self.zbxproxy["id"]):
+                self.logger.debug(f"Host {self.name}: proxy in-sync.")
             # Backwards compatibility for Zabbix <= 6
-            # elif "proxy_hostid" in host and host["proxy_hostid"] == self.zbxproxy["id"]:
-                #self.logger.debug(f"Host {self.name}: proxy in-sync.")
+            elif "proxy_hostid" in host and host["proxy_hostid"] == self.zbxproxy["id"]:
+                self.logger.debug(f"Host {self.name}: proxy in-sync.")
             # Proxy does not match, update Zabbix
-            # else:
-            self.logger.warning(f"Host {self.name}: proxy OUT of sync.")
+            else:
+                self.logger.warning(f"Host {self.name}: proxy OUT of sync.")
                 # Zabbix <= 6 patch
             if not str(self.zabbix.version).startswith('7'):
                 self.updateZabbixHost(proxy_hostid=self.zbxproxy['id'])
@@ -649,22 +649,22 @@ class PhysicalDevice():
                                     f"with proxy in Zabbix but not in NetBox. The"
                                     " -p flag was ommited: no "
                                     "changes have been made.")
-            # if not proxy_set:
-            #     self.logger.debug(f"Host {self.name}: proxy in-sync.")
+            if not proxy_set:
+                self.logger.debug(f"Host {self.name}: proxy in-sync.")
         # Check host inventory mode
         if not str(host['inventory_mode']) == str(self.inventory_mode):
-        #     self.logger.debug(f"Host {self.name}: inventory_mode in-sync.")
-        # else:
-        #     self.logger.warning(f"Host {self.name}: inventory_mode OUT of sync.")
+            self.logger.debug(f"Host {self.name}: inventory_mode in-sync.")
+        else:
+            self.logger.warning(f"Host {self.name}: inventory_mode OUT of sync.")
             self.updateZabbixHost(inventory_mode=str(self.inventory_mode))
         if inventory_sync and self.inventory_mode in [0,1]:
             # Check host inventory mapping
             if not host['inventory'] == self.inventory:
-            #     self.logger.debug(f"Host {self.name}: inventory in-sync.")
-            # else:
-            #     self.logger.warning(f"Host {self.name}: inventory OUT of sync.")
+                self.logger.debug(f"Host {self.name}: inventory in-sync.")
+            else:
+                self.logger.warning(f"Host {self.name}: inventory OUT of sync.")
                 self.updateZabbixHost(inventory=self.inventory)
-
+# 
         # If only 1 interface has been found
         # pylint: disable=too-many-nested-blocks
         if len(host['interfaces']) == 1:
@@ -722,7 +722,7 @@ class PhysicalDevice():
             else:
                 # If no updates are found, Zabbix interface is in-sync
                 e = f"Host {self.name}: interface in-sync."
-                #self.logger.debug(e)
+                self.logger.debug(e)
                 self.logger.info(f"{self.name} created or sync ")
 
         else:
@@ -749,7 +749,7 @@ class PhysicalDevice():
                        }
             try:
                 self.nb_journals.create(journal)
-                #self.logger.debug(f"Host {self.name}: Created journal entry in NetBox")
+                self.logger.debug(f"Host {self.name}: Created journal entry in NetBox")
                 return True
             except JournalError(e) as e:
                 self.logger.warning("Unable to create journal entry for "
@@ -776,7 +776,7 @@ class PhysicalDevice():
                     # and add this NB template to the list of successfull templates
                     tmpls_from_zabbix.pop(pos)
                     succesfull_templates.append(nb_tmpl)
-                    #self.logger.debug(f"Host {self.name}: template "f"{nb_tmpl['name']} is present in Zabbix.")
+                    self.logger.debug(f"Host {self.name}: template "f"{nb_tmpl['name']} is present in Zabbix.")
                     break
         if len(succesfull_templates) == len(self.zbx_templates) and len(tmpls_from_zabbix) == 0:
             # All of the NetBox templates have been confirmed as successfull
