@@ -397,17 +397,17 @@ class PhysicalDevice():
                         self.zbxproxy = proxy
                         return True
                     else:
-                        if self.nb.site == "CCI06" :
+                        if self.nb.region == "CCI06" :
                             proxy_nametest = "zabbix-pxy-siege"
                             self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_nametest}")
                             self.zbxproxy = proxy
                             return True
-                        elif self.nb.site == "CCI13" :
+                        elif self.nb.region == "CCI13" :
                             proxy_nametest = "zabbix-pxy-cciamp"
                             self.logger.debug(f"Host {self.name}: using {proxy['type']}"f" {proxy_nametest}")
                             self.zbxproxy = proxy
                             return True
-                    self.logger.warning(f"Host {self.name}: unable to find proxy {proxy_nametest}")
+                self.logger.warning(f"Host {self.name}: unable to find proxy {proxy_nametest}")
         return False
 
     def createInZabbix(self, groups, templates, proxies,
